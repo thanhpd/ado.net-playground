@@ -114,5 +114,51 @@ namespace ado.net_playground
                 }
             }
         }
+
+        public static void DataSetFromMultipleDataAdapter(SqlConnection connection)
+        {
+            using (connection)
+            {
+                SqlDataAdapter territoryAdapter = new SqlDataAdapter("SELECT * FROM Territories", connection);
+                SqlDataAdapter employeeAdapter = new SqlDataAdapter("SELECT * FROM Employees", connection);
+                SqlDataAdapter employeeTerritoriesAdapter = new SqlDataAdapter("SELECT * FROM EmployeeTerritories", connection);
+
+                DataSet employeeTerritories = new DataSet();
+
+                territoryAdapter.Fill(employeeTerritories, "Territories");
+                employeeAdapter.Fill(employeeTerritories, "Employees");
+                employeeTerritoriesAdapter.Fill(employeeTerritories, "EmployeeTerritories");
+
+                DataRelation relation1 = employeeTerritories.Relations.Add("EmployeeID",
+                    employeeTerritories.Tables["Employees"].Columns["EmployeeID"],
+                    employeeTerritories.Tables["EmployeeTerritories"].Columns["EmployeeID"]);
+                DataRelation relation2 = employeeTerritories.Relations.Add("TerritoryID",
+                    employeeTerritories.Tables["Territories"].Columns["TerritoryID"],
+                    employeeTerritories.Tables["EmployeeTerritories"].Columns["TerritoryID"]);
+
+                foreach (DataRow p1Row in employeeTerritories.Tables["Territories"].Rows)
+                {
+                    Console.WriteLine($"Territory ID = {p1Row["TerritoryID"]}");
+                    foreach (object item in p1Row.ItemArray)
+                    {
+                        Console.Write($"{item} ");
+                    }
+                    Console.WriteLine();
+                    foreach (DataRow p2Row in p1Row.GetChildRows(relation2))
+                    {
+                        Console.WriteLine($"EmployeeID = {p2Row["EmployeeID"]}");
+                        foreach (DataRow p3Row in p2Row.GetParentRows(relation1))
+                        {
+                            foreach (object item in p3Row.ItemArray)
+                            {
+                                Console.Write($"{item} ");
+                            }
+                        }
+                        Console.WriteLine();
+                    }
+                }
+
+            }
+        }
     }
 }

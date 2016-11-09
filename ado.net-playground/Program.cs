@@ -14,7 +14,7 @@ namespace ado.net_playground
         {
             string connectionString = ConfigurationManager.ConnectionStrings["NorthwindConnectionString"].ConnectionString;
             SqlConnection connection = new SqlConnection(connectionString);
-            WorkerRepo.BasicCommandDataAdapter(connection);
+            WorkerRepo.DataSetFromMultipleDataAdapter(connection);
             Console.ReadLine();
         }
     }

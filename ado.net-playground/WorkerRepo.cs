@@ -11,10 +11,9 @@ namespace ado.net_playground
 {
     class WorkerRepo
     {
-        public static void BasicCommand()
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["NorthwindConnectionString"].ConnectionString;
-            using (SqlConnection connection = new SqlConnection(connectionString))
+        public static void BasicCommandDataReader(SqlConnection connection)
+        {            
+            using (connection)
             {
                 SqlCommand command = new SqlCommand();
                 command.Connection = connection;
@@ -41,10 +40,9 @@ namespace ado.net_playground
             }
         }
 
-        public static void MultipleResults()
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["NorthwindConnectionString"].ConnectionString;
-            using (SqlConnection connection = new SqlConnection(connectionString))
+        public static void MultipleResultsDataReader(SqlConnection connection)
+        {            
+            using (connection)
             {
                 SqlCommand command = new SqlCommand();
                 command.Connection = connection;
@@ -65,6 +63,55 @@ namespace ado.net_playground
                 }                
 
                 reader.Close();
+            }
+        }
+
+        public static void GetSchemaInfoDataReader(SqlConnection connection)
+        {
+            using (connection)
+            {
+                SqlCommand command = new SqlCommand();
+                command.Connection = connection;
+                command.CommandText = "SELECT CategoryID, CategoryName FROM Categories";
+                connection.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+                DataTable schemaTable = reader.GetSchemaTable();
+
+                foreach (DataRow row in schemaTable.Rows)
+                {
+                    foreach (DataColumn column in schemaTable.Columns)
+                    {
+                        Console.WriteLine($"{column.ColumnName} = {row[column]}");
+                    }                    
+                }                
+            }
+        }
+
+        public static void BasicCommandDataAdapter(SqlConnection connection)
+        {
+            using (connection)
+            {
+                string queryString = "SELECT TOP 100 * FROM Customers";
+                SqlDataAdapter adapter = new SqlDataAdapter(queryString, connection);
+
+                DataSet customers = new DataSet();
+                adapter.Fill(customers, "Customers");
+
+                if (!customers.HasErrors)
+                {
+                    foreach (DataTable table in customers.Tables)
+                    {
+                        foreach (DataRow row in table.Rows)
+                        {
+                            foreach (object item in row.ItemArray)
+                            {
+                                Console.Write($"{item} ");
+                            }
+                            Console.WriteLine();
+                        }                        
+                    }                    
+                }
             }
         }
     }

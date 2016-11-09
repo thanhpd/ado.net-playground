@@ -202,5 +202,22 @@ namespace ado.net_playground
                 }
             }
         }
+
+        public static void FillDataSetWithConstraintFromDataAdapter(SqlConnection connection)
+        {
+            SqlDataAdapter customerAdapter = CreateSqlDataAdapter(connection);
+            customerAdapter.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+            DataSet customerDataSet = new DataSet();
+            customerAdapter.FillSchema(customerDataSet, SchemaType.Source, "Customers");
+            customerAdapter.Fill(customerDataSet, "Customers");            
+
+            foreach (DataTable dataTable in customerDataSet.Tables)
+            {
+                foreach (Constraint dataTableConstraint in dataTable.Constraints)
+                {
+                    Console.WriteLine($"{dataTableConstraint.ConstraintName} {dataTableConstraint.ExtendedProperties}");
+                }                
+            }
+        }
     }
 }

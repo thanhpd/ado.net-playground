@@ -10,6 +10,8 @@ namespace ado.net_playground
     {
         static void Main(string[] args)
         {
+            WorkerRepo.EstablishConnection();
+            Console.ReadLine();
         }
     }
 }

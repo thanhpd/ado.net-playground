@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -217,6 +218,34 @@ namespace ado.net_playground
                 {
                     Console.WriteLine($"{dataTableConstraint.ConstraintName} {dataTableConstraint.ExtendedProperties}");
                 }                
+            }
+        }
+
+        public static void TestingMappingDataAdapter(SqlConnection connection)
+        {
+            using (connection)
+            {
+                SqlDataAdapter employeeAdapter = new SqlDataAdapter("SELECT * FROM Employees", connection);
+                DataTableMapping mapping = employeeAdapter.TableMappings.Add("EmployeesTable", "Employees");
+                mapping.ColumnMappings.Add("GivenName", "FirstName");
+                mapping.ColumnMappings.Add("FamilyName", "LastName");
+                DataSet employeeDataSet = new DataSet();
+                employeeAdapter.Fill(employeeDataSet, "EmployeesTable");
+
+                if (!employeeDataSet.HasErrors)
+                {
+                    foreach (DataTable table in employeeDataSet.Tables)
+                    {
+                        foreach (DataRow row in table.Rows)
+                        {
+                            foreach (object item in row.ItemArray)
+                            {
+                                Console.Write($"{item} ");
+                            }
+                            Console.WriteLine();
+                        }
+                    }
+                }
             }
         }
     }

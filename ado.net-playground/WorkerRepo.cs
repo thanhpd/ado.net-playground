@@ -248,5 +248,34 @@ namespace ado.net_playground
                 }
             }
         }
+
+        // Not really recommend since server still return all result instead of a small chunk; use query instead
+        public static void PagingQueryResultDataAdapter(SqlConnection connection)
+        {
+            using (connection)
+            {
+                int currentIndex = 0;
+                int pageSize = 5;
+
+                SqlDataAdapter customerAdapter = new SqlDataAdapter("SELECT * FROM Customers ORDER BY CustomerID", connection);
+                DataSet customersDataSet = new DataSet();
+                customerAdapter.Fill(customersDataSet, currentIndex, pageSize, "Customers");
+
+                if (!customersDataSet.HasErrors)
+                {
+                    foreach (DataTable table in customersDataSet.Tables)
+                    {
+                        foreach (DataRow row in table.Rows)
+                        {
+                            foreach (object item in row.ItemArray)
+                            {
+                                Console.Write($"{item} ");
+                            }
+                            Console.WriteLine();
+                        }
+                    }
+                }
+            }
+        }
     }
 }

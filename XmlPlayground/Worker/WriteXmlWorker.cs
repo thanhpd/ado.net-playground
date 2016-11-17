@@ -6,26 +6,16 @@ using System.Threading.Tasks;
 
 namespace XmlPlayground.Worker
 {
-    public class WriteXmlWorker
+    public class XmlWorkerHelper
     {
-        public static void UsingXmlWriter()
-        {
-            
-        }
+        private static XmlWorkerHelper _instance;
+        private XmlWorkerHelper() { }
 
-        public static void UsingXDocument()
+        public static XmlWorkerHelper GetInstance()
         {
-            
-        }
-
-        public static void UsingDataSet()
-        {
-            
-        }
-
-        public static void UsingLinqXElement()
-        {
-            
+            return _instance ?? (_instance = new XmlWorkerHelper());
         }
     }
+
+    public class 
 }

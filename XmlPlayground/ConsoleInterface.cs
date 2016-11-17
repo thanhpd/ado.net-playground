@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using XmlPlayground.Worker;
 
@@ -24,7 +26,7 @@ namespace XmlPlayground
                     var interfaceReading = new InterfaceReading();
                     break;
                 case "2":
-                    InterfaceWriting();
+                    var interfaceWriting = new InterfaceWriting();
                     break;
                 case "3":
                     InterfaceSamples();
@@ -184,19 +186,146 @@ namespace XmlPlayground
             }
         }
 
-        public static void InterfaceWriting()
+        public class InterfaceWriting
         {
-            Console.WriteLine("Writing XML");
-            Console.WriteLine("===========");
-            Console.WriteLine("1. XmlWriter");
-            Console.WriteLine("2. XDocument");
-            Console.WriteLine("3. DataSet");
-            Console.WriteLine("4. LINQ/XElement");
-            Console.Write("Select: ");
-            var input = Console.ReadLine();
-            switch (input)
+            public InterfaceWriting()
             {
-                    
+                InterfaceInit();
+            }
+
+            public void InterfaceInit()
+            {
+                Console.WriteLine("Writing XML");
+                Console.WriteLine("===========");
+                Console.WriteLine("1. XmlWriter");
+                Console.WriteLine("2. XDocument");
+                Console.WriteLine("3. DataSet");
+                Console.WriteLine("4. LINQ/XElement");
+                Console.Write("Select: ");
+                var input = Console.ReadLine();
+                switch (input)
+                {
+                    case "1":
+                        interfaceXmlWriter();
+                        break;
+                    case "2":
+                        interfaceXDocument();
+                        break;
+                    case "3":
+                        interfaceDataSet();
+                        break;
+                    case "4":
+                        interfaceLinqXElement();
+                        break;
+                }
+            }
+
+            private void interfaceXmlWriter()
+            {
+                Console.WriteLine("Writing XML > Write using XmlWriter Class");
+                Console.WriteLine("===========");
+                Console.WriteLine("1. Simple Writing");
+                Console.WriteLine("2. Writing Attributes");
+                Console.WriteLine("3. Formatting");
+                Console.WriteLine("4. Write to StringBuilder");
+                Console.Write("Select: ");
+                var input = Console.ReadLine();
+                switch (input)
+                {
+                    case "1":
+                        interfaceXmlWriter();
+                        break;
+                    case "2":
+                        interfaceXDocument();
+                        break;
+                    case "3":
+                        interfaceDataSet();
+                        break;
+                    case "4":
+                        interfaceLinqXElement();
+                        break;
+                }
+            }
+
+            private void interfaceXDocument()
+            {
+                Console.WriteLine("Writing XML > Write using XDocument Class");
+                Console.WriteLine("===========");
+                Console.WriteLine("1. Simple Writing Verbose");
+                Console.WriteLine("2. Simple Writing");
+                Console.WriteLine("3. Writing Attributes");
+                Console.WriteLine("4. No Formatting");
+                Console.Write("Select: ");
+                var input = Console.ReadLine();
+                switch (input)
+                {
+                    case "1":
+                        interfaceXmlWriter();
+                        break;
+                    case "2":
+                        interfaceXDocument();
+                        break;
+                    case "3":
+                        interfaceDataSet();
+                        break;
+                    case "4":
+                        interfaceLinqXElement();
+                        break;
+                }
+            }
+
+            private void interfaceDataSet()
+            {
+                Console.WriteLine("Writing XML > Write using DataSet Class");
+                Console.WriteLine("===========");
+                Console.WriteLine("1. Infer Schema/Write");
+                Console.WriteLine("2. String to DataSet");                
+                Console.Write("Select: ");
+                var input = Console.ReadLine();
+                switch (input)
+                {
+                    case "1":
+                        interfaceXmlWriter();
+                        break;
+                    case "2":
+                        interfaceXDocument();
+                        break;                    
+                }
+            }
+
+            private void interfaceLinqXElement()
+            {
+                Console.WriteLine("Writing XML > Write using XDocument Class");
+                Console.WriteLine("===========");
+                Console.WriteLine("1. Write XDocument");
+                Console.WriteLine("2. Write XElement");
+                Console.WriteLine("3. Add Element using Constructor");
+                Console.WriteLine("4. Add Element by Cloning");
+                Console.WriteLine("5. Update Element");
+                Console.WriteLine("6. Delete Element");
+                Console.Write("Select: ");
+                var input = Console.ReadLine();
+                switch (input)
+                {
+                    case "1":
+                        interfaceXmlWriter();
+                        break;
+                    case "2":
+                        interfaceXDocument();
+                        break;
+                    case "3":
+                        interfaceDataSet();
+                        break;
+                    case "4":
+                        interfaceLinqXElement();
+                        break;
+                    case "5":
+                        interfaceLinqXElement();
+                        break;
+                    case "6":
+                        interfaceLinqXElement();
+                        break;
+                }
             }
         }
 

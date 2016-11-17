@@ -187,6 +187,38 @@ namespace XmlPlayground.Worker
         }
     }
 
+
+    public class XmlWriterHelper
+    {
+        private static XmlWriterHelper _instance;
+        private XmlWriterHelper() { }
+
+        public static XmlWriterHelper GetInstance()
+        {
+            return _instance ?? (_instance = new XmlWriterHelper());
+        }
+
+        public void SimpleWriting()
+        {
+
+        }
+
+        public void WritingAttributes()
+        {
+
+        }
+
+        public void Formatting()
+        {
+
+        }
+
+        public void WriteToStringBuilder()
+        {
+
+        }
+    }
+
     public class XDocumentHelper
     {
         private static XDocumentHelper _instance;
@@ -268,6 +300,26 @@ namespace XmlPlayground.Worker
         {
 
         }
+
+        public void SimpleWritingVerbose()
+        {
+            
+        }
+
+        public void SimpleWriting()
+        {
+            
+        }
+
+        public void WritingAttributes()
+        {
+            
+        }
+
+        public void NoFormatting()
+        {
+            
+        }
     }
 
     public class DataSetHelper
@@ -338,6 +390,16 @@ namespace XmlPlayground.Worker
 
             Console.WriteLine("done");
         }
+
+        public void InferSchemaWrite()
+        {
+            
+        }
+
+        public void StringToDataSet()
+        {
+            
+        }
     }
 
     public class LinqXElementHelper
@@ -407,6 +469,36 @@ namespace XmlPlayground.Worker
                 builder.Append(Environment.NewLine);
             }
             Console.Write(builder.ToString());
+        }
+
+        public void WriteXDocument()
+        {
+            
+        }
+
+        public void WriteXElement()
+        {
+            
+        }
+
+        public void AddElementConstructor()
+        {
+            
+        }
+
+        public void AddElementCloning()
+        {
+            
+        }
+
+        public void UpdateElement()
+        {
+            
+        }
+
+        public void DeleteElement()
+        {
+            
         }
     }
 }

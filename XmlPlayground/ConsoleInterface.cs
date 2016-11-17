@@ -233,16 +233,16 @@ namespace XmlPlayground
                 switch (input)
                 {
                     case "1":
-                        interfaceXmlWriter();
+                        XmlWriterHelper.GetInstance().SimpleWriting();
                         break;
                     case "2":
-                        interfaceXDocument();
+                        XmlWriterHelper.GetInstance().WritingAttributes();
                         break;
                     case "3":
-                        interfaceDataSet();
+                        XmlWriterHelper.GetInstance().Formatting();
                         break;
                     case "4":
-                        interfaceLinqXElement();
+                        XmlWriterHelper.GetInstance().WriteToStringBuilder();
                         break;
                 }
             }
@@ -260,16 +260,16 @@ namespace XmlPlayground
                 switch (input)
                 {
                     case "1":
-                        interfaceXmlWriter();
+                        XDocumentHelper.GetInstance().SimpleWritingVerbose();
                         break;
                     case "2":
-                        interfaceXDocument();
+                        XDocumentHelper.GetInstance().SimpleWriting();
                         break;
                     case "3":
-                        interfaceDataSet();
+                        XDocumentHelper.GetInstance().WritingAttributes();
                         break;
                     case "4":
-                        interfaceLinqXElement();
+                        XDocumentHelper.GetInstance().NoFormatting();
                         break;
                 }
             }
@@ -285,10 +285,10 @@ namespace XmlPlayground
                 switch (input)
                 {
                     case "1":
-                        interfaceXmlWriter();
+                        DataSetHelper.GetInstance().InferSchemaWrite();
                         break;
                     case "2":
-                        interfaceXDocument();
+                        DataSetHelper.GetInstance().StringToDataSet();
                         break;                    
                 }
             }
@@ -308,22 +308,22 @@ namespace XmlPlayground
                 switch (input)
                 {
                     case "1":
-                        interfaceXmlWriter();
+                        LinqXElementHelper.GetInstance().WriteXDocument();
                         break;
                     case "2":
-                        interfaceXDocument();
+                        LinqXElementHelper.GetInstance().WriteXElement();
                         break;
                     case "3":
-                        interfaceDataSet();
+                        LinqXElementHelper.GetInstance().AddElementConstructor();
                         break;
                     case "4":
-                        interfaceLinqXElement();
+                        LinqXElementHelper.GetInstance().AddElementCloning();
                         break;
                     case "5":
-                        interfaceLinqXElement();
+                        LinqXElementHelper.GetInstance().UpdateElement();
                         break;
                     case "6":
-                        interfaceLinqXElement();
+                        LinqXElementHelper.GetInstance().DeleteElement();
                         break;
                 }
             }

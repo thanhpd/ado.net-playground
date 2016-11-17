@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Customers>
+  <Customer>
+    <CustomerId>1</CustomerId>
+    <Name>Microsoft</Name>
+    <Products>
+      <Product>
+        <Name>Word</Name>
+        <ReleaseDate>2013</ReleaseDate>
+      </Product>
+      <Product>
+        <Name>Excel</Name>
+        <ReleaseDate>2013</ReleaseDate>
+      </Product>
+    </Products>
+  </Customer>
+  <Customer>
+    <CustomerId>2</CustomerId>
+    <Name>PluralSight</Name>
+    <Products>
+      <Product>
+        <Name>C# Fundamentals</Name>
+      </Product>
+      <Product>
+        <Name>C# 5 New Features</Name>
+      </Product>
+    </Products>
+  </Customer>
+</Customers>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Employees>
+  <Employee>
+    <id>1</id>
+    <FirstName>Paul</FirstName>
+    <LastName>Sheriff</LastName>
+  </Employee>
+  <Employee>
+    <id>2</id>
+    <FirstName>Bruce</FirstName>
+    <LastName>Jones</LastName>
+  </Employee>
+</Employees>

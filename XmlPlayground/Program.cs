@@ -10,6 +10,9 @@ namespace XmlPlayground
     {
         static void Main(string[] args)
         {
+            ConsoleInterface consoleInterface = new ConsoleInterface();
+            consoleInterface.InterfaceMain();
+            Console.ReadKey();
         }
     }
 }

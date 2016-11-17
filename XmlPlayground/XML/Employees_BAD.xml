@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Employees>
+  <!-- NOTE: That Phone is used below -->
+  <Employee>
+    <id>1</id>
+    <FirstName>Bruce</FirstName>
+    <Phone>123-123-1233</Phone>
+  </Employee>
+</Employees>

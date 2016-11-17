@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -243,12 +244,24 @@ namespace XmlPlayground.Worker
 
         public void LoadXml()
         {
-
+            var xml = "<Employees> <Employee> <id>1</id> <FirstName>Bruce</FirstName> <LastName>Jones</LastName> </Employee> <Employee> <id>2</id> <FirstName>Ken</FirstName> <LastName>Getz</LastName> </Employee> <Employee> <id>3</id> <FirstName>Rob</FirstName> <LastName>Howard</LastName> </Employee> <Employee> <id>4</id> <FirstName>Rocky</FirstName> <LastName>Lhotka</LastName> </Employee> <Employee> <id>5</id> <FirstName>Miguel</FirstName> <LastName>Castro</LastName> </Employee> <Employee> <id>6</id> <FirstName>Bill</FirstName> <LastName>Gates</LastName> </Employee> <Employee> <id>7</id> <FirstName>Jerry</FirstName> <LastName>Seinfeld</LastName> </Employee> <Employee> <id>8</id> <FirstName>Beth</FirstName> <LastName>Massi</LastName> </Employee> <Employee> <id>9</id> <FirstName>Jay</FirstName> <LastName>Roxe</LastName> </Employee> <Employee> <id>10</id> <FirstName>Andrew</FirstName> <LastName>Brust</LastName> </Employee> <Employee> <id>11</id> <FirstName>Benjamin</FirstName> <LastName>Day</LastName> </Employee> <Employee> <id>12</id> <FirstName>Jackie</FirstName> <LastName>Goldstein</LastName> </Employee> <Employee> <id>13</id> <FirstName>Robert </FirstName> <LastName>Green</LastName> </Employee> <Employee> <id>14</id> <FirstName>Fritz</FirstName> <LastName>Onion</LastName> </Employee> <Employee> <id>15</id> <FirstName>Brian</FirstName> <LastName>Randell</LastName> </Employee> <Employee> <id>16</id> <FirstName>Richard</FirstName> <LastName>Hale Shaw</LastName> </Employee> <Employee> <id>17</id> <FirstName>Scott</FirstName> <LastName>Guthrie</LastName> </Employee> <Employee> <id>18</id> <FirstName>Scott</FirstName> <LastName>Hanselman</LastName> </Employee> <Employee> <id>19</id> <FirstName>Jim</FirstName> <LastName>Ruhl</LastName> </Employee> <Employee> <id>20</id> <FirstName>John</FirstName> <LastName>Kuhn</LastName> </Employee> <Employee> <id>21</id> <FirstName>John</FirstName> <LastName>Brongo</LastName> </Employee> <Employee> <id>22</id> <FirstName>David</FirstName> <LastName>Takigawa</LastName> </Employee> <Employee> <id>23</id> <FirstName>Paul</FirstName> <LastName>Sheriff</LastName> </Employee> <Employee> <id>24</id> <FirstName>James</FirstName> <LastName>Byrd</LastName> </Employee></Employees>";
+            XDocument xd = XDocument.Parse(xml);
+            Console.Write(xd.ToString());
         }
 
         public void GetAttributes()
         {
-
+            StringBuilder builder = new StringBuilder();
+            XDocument xd = XDocument.Load(AppConfig.GetEmployeesFileWithAttributes());
+            var list = xd.XPathSelectElements("//Employee");
+            foreach (XElement node in list)
+            {
+                builder.AppendFormat("id={0}", node.Attribute("id").Value);
+                builder.Append(Environment.NewLine);
+                builder.AppendFormat("FirstName = {0}", node.Element("FirstName").Value);
+                builder.Append(Environment.NewLine);
+            }
+            Console.Write(builder.ToString());
         }
 
         public void FindByAttribute()
@@ -269,22 +282,61 @@ namespace XmlPlayground.Worker
 
         public void UsingSimpleProcessing()
         {
+            DataSet ds = new DataSet();
+            StringBuilder builder = new StringBuilder(1024);
 
+            ds.ReadXml(AppConfig.GetEmployeesFile());
+            foreach (DataRow dataRow in ds.Tables[0].Rows)
+            {
+                builder.AppendFormat("{0} {1} {2}", dataRow["id"], dataRow["FirstName"], dataRow["LastName"]);
+                builder.Append(Environment.NewLine);
+            }
+            Console.Write(builder.ToString());
         }
 
         public void UsingSelectMethod()
         {
+            DataSet ds = new DataSet();
+            StringBuilder builder = new StringBuilder(1024);
+            DataRow[] rows;
 
+            ds.ReadXml(AppConfig.GetEmployeesFile());
+            rows = ds.Tables[0].Select("LastName LIKE 's%'");
+            foreach (DataRow dataRow in ds.Tables[0].Rows)
+            {
+                builder.AppendFormat("{0} {1} {2}", dataRow["id"], dataRow["FirstName"], dataRow["LastName"]);
+                builder.Append(Environment.NewLine);
+            }
+            Console.Write(builder.ToString());
         }
 
         public void ReadingSchema()
         {
+            DataSet ds = new DataSet();
+            StringBuilder builder = new StringBuilder(1024);
 
+            ds.ReadXmlSchema(AppConfig.GetEmployeesSchemaFile());
+            ds.ReadXml(AppConfig.GetEmployeesFile());
+
+            Console.WriteLine("done");
         }
 
         public void ReadingSchemaBad()
         {
+            DataSet ds = new DataSet();
+            StringBuilder builder = new StringBuilder(1024);
 
+            try
+            {
+                ds.ReadXmlSchema(AppConfig.GetEmployeesSchemaFile());
+                ds.ReadXml(AppConfig.GetEmployeesBadFile());
+            }
+            catch (ConstraintException e)
+            {
+                Console.WriteLine("Constraint Violation");
+            }
+
+            Console.WriteLine("done");
         }
     }
 
@@ -300,22 +352,61 @@ namespace XmlPlayground.Worker
 
         public void SelectSingleXPath()
         {
-
+            StringBuilder builder = new StringBuilder(1024);
+            XElement xe = XElement.Load(AppConfig.GetEmployeesFile());
+            var emp = xe.XPathSelectElement("//Employee[id='1']");
+            if (emp != null)
+            {
+                builder.AppendFormat("{0} {1} {2}", emp.Element("id").Value, emp.Element("FirstName").Value,
+                    emp.Element("LastName").Value);
+                builder.Append(Environment.NewLine);
+            }
+            Console.Write(builder.ToString());
         }
 
         public void SelectSingleLinq()
         {
-
+            StringBuilder builder = new StringBuilder(1024);
+            XElement xe = XElement.Load(AppConfig.GetEmployeesFile());
+            var emp =
+                (from e in xe.Descendants("Employee") where e.Element("id").Value == "1" select e).SingleOrDefault();
+            if (emp != null)
+            {
+                builder.AppendFormat("{0} {1} {2}", emp.Element("id").Value, emp.Element("FirstName").Value,
+                    emp.Element("LastName").Value);
+                builder.Append(Environment.NewLine);
+            }
+            Console.Write(builder.ToString());
         }
 
         public void SelectMultipleXPath()
         {
-
+            StringBuilder builder = new StringBuilder(1024);
+            XElement xe = XElement.Load(AppConfig.GetEmployeesFile());
+            var emp = xe.XPathSelectElements("//Employee[LastName[starts-with(.,'S')]]");
+            foreach (XElement element in emp)
+            {
+                builder.AppendFormat("{0} {1} {2}", element.Element("id").Value, element.Element("FirstName").Value,
+                    element.Element("LastName").Value);
+                builder.Append(Environment.NewLine);
+            }
+            
+            Console.Write(builder.ToString());
         }
 
         public void SelectMultipleLinq()
         {
-
+            StringBuilder builder = new StringBuilder(1024);
+            XElement xe = XElement.Load(AppConfig.GetEmployeesFile());
+            var emp =
+                (from e in xe.Descendants("Employee") where e.Element("LastName").Value.StartsWith("S") select e);
+            foreach (XElement element in emp)
+            {
+                builder.AppendFormat("{0} {1} {2}", element.Element("id").Value, element.Element("FirstName").Value,
+                    element.Element("LastName").Value);
+                builder.Append(Environment.NewLine);
+            }
+            Console.Write(builder.ToString());
         }
     }
 }

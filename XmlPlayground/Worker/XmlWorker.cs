@@ -568,12 +568,30 @@ namespace XmlPlayground.Worker
 
         public void InferSchemaWrite()
         {
+            DataSet ds = new DataSet();
+            StringBuilder builder = new StringBuilder();
+
+            ds.ReadXml(AppConfig.GetEmployeesFile());
+
+            ds.WriteXml(AppConfig.XmlFile);
+            ds.WriteXmlSchema(AppConfig.XsdFile);
             
+            builder.Append(File.ReadAllText(AppConfig.XmlFile));
+            builder.Append(Environment.NewLine);
+            builder.Append(File.ReadAllText(AppConfig.XsdFile));
+            Console.Write(builder.ToString());
         }
 
         public void StringToDataSet()
         {
-            
+            var xml = "<Employees> <Employee> <id>1</id> <FirstName>Bruce</FirstName> <LastName>Jones</LastName> </Employee> <Employee> <id>2</id> <FirstName>Ken</FirstName> <LastName>Getz</LastName> </Employee> <Employee> <id>3</id> <FirstName>Rob</FirstName> <LastName>Howard</LastName> </Employee> <Employee> <id>4</id> <FirstName>Rocky</FirstName> <LastName>Lhotka</LastName> </Employee> <Employee> <id>5</id> <FirstName>Miguel</FirstName> <LastName>Castro</LastName> </Employee> <Employee> <id>6</id> <FirstName>Bill</FirstName> <LastName>Gates</LastName> </Employee> <Employee> <id>7</id> <FirstName>Jerry</FirstName> <LastName>Seinfeld</LastName> </Employee> <Employee> <id>8</id> <FirstName>Beth</FirstName> <LastName>Massi</LastName> </Employee> <Employee> <id>9</id> <FirstName>Jay</FirstName> <LastName>Roxe</LastName> </Employee> <Employee> <id>10</id> <FirstName>Andrew</FirstName> <LastName>Brust</LastName> </Employee> <Employee> <id>11</id> <FirstName>Benjamin</FirstName> <LastName>Day</LastName> </Employee> <Employee> <id>12</id> <FirstName>Jackie</FirstName> <LastName>Goldstein</LastName> </Employee> <Employee> <id>13</id> <FirstName>Robert </FirstName> <LastName>Green</LastName> </Employee> <Employee> <id>14</id> <FirstName>Fritz</FirstName> <LastName>Onion</LastName> </Employee> <Employee> <id>15</id> <FirstName>Brian</FirstName> <LastName>Randell</LastName> </Employee> <Employee> <id>16</id> <FirstName>Richard</FirstName> <LastName>Hale Shaw</LastName> </Employee> <Employee> <id>17</id> <FirstName>Scott</FirstName> <LastName>Guthrie</LastName> </Employee> <Employee> <id>18</id> <FirstName>Scott</FirstName> <LastName>Hanselman</LastName> </Employee> <Employee> <id>19</id> <FirstName>Jim</FirstName> <LastName>Ruhl</LastName> </Employee> <Employee> <id>20</id> <FirstName>John</FirstName> <LastName>Kuhn</LastName> </Employee> <Employee> <id>21</id> <FirstName>John</FirstName> <LastName>Brongo</LastName> </Employee> <Employee> <id>22</id> <FirstName>David</FirstName> <LastName>Takigawa</LastName> </Employee> <Employee> <id>23</id> <FirstName>Paul</FirstName> <LastName>Sheriff</LastName> </Employee> <Employee> <id>24</id> <FirstName>James</FirstName> <LastName>Byrd</LastName> </Employee></Employees>";
+            DataSet ds = new DataSet();
+            StringBuilder builder = new StringBuilder();
+            builder.Append(xml);
+
+            ds.ReadXml(new StringReader(builder.ToString()));
+            ds.WriteXml(AppConfig.XmlFile);
+            Console.Write(File.ReadAllText(AppConfig.XmlFile));
         }
     }
 
@@ -648,32 +666,89 @@ namespace XmlPlayground.Worker
 
         public void WriteXDocument()
         {
-            
+            var emp = new XDocument(
+                new XDeclaration("1.0", "utf-8", "yes"),
+                new XComment("Employee List"),
+                new XElement("Employees",
+                new XElement("Employee",
+                new XElement("id","1"), new XElement("FirstName", "Bruce"), new XElement("LastName", "Jones"))));
+            emp.Save(AppConfig.XmlFile);
+            StringBuilder builder = new StringBuilder();
+            builder.Append(File.ReadAllText(AppConfig.XmlFile));
+            Console.Write(builder.ToString());
         }
 
         public void WriteXElement()
         {
-            
+            var emp = new XElement(                
+                new XElement("Employees",
+                new XElement("Employee",
+                new XElement("id", "1"), new XElement("FirstName", "Bruce"), new XElement("LastName", "Jones"))));
+            emp.Save(AppConfig.XmlFile);
+            StringBuilder builder = new StringBuilder();
+            builder.Append(File.ReadAllText(AppConfig.XmlFile));
+            Console.Write(builder.ToString());
         }
 
         public void AddElementConstructor()
         {
-            
+            var doc = XElement.Load(AppConfig.GetEmployeesFile());
+            var emp = new XElement(
+                new XElement("Employees",
+                new XElement("Employee",
+                new XElement("id", "100"), new XElement("FirstName", "Bruce1"), new XElement("LastName", "Jones2"))));
+            doc.Add(emp);
+            doc.Save(AppConfig.XmlFile);
+            StringBuilder builder = new StringBuilder();
+            builder.Append(File.ReadAllText(AppConfig.XmlFile));
+            Console.Write(builder.ToString());
         }
 
         public void AddElementCloning()
         {
-            
+            var doc = XElement.Load(AppConfig.GetEmployeesFile());
+            var emp = (from e in doc.Descendants("Employee") select e).FirstOrDefault();
+            if (emp != null)
+            {
+                var newEmp = new XElement(emp);
+                newEmp.Element("id").Value = "102";
+                newEmp.Element("FirstName").Value = "A";
+                newEmp.Element("LastName").Value = "BN";
+                doc.Add(newEmp);
+            }            
+            doc.Save(AppConfig.XmlFile);
+            StringBuilder builder = new StringBuilder();
+            builder.Append(File.ReadAllText(AppConfig.XmlFile));
+            Console.Write(builder.ToString());
         }
 
         public void UpdateElement()
         {
-            
+            var doc = XElement.Load(AppConfig.XmlFile);
+            var emp = (from e in doc.Descendants("Employee") where e.Element("id").Value.Equals("102") select e).SingleOrDefault();
+            if (emp != null)
+            {                              
+                emp.Element("FirstName").Value = "Kamen";
+                emp.Element("LastName").Value = "Rider";
+            }
+            doc.Save(AppConfig.XmlFile);
+            StringBuilder builder = new StringBuilder();
+            builder.Append(File.ReadAllText(AppConfig.XmlFile));
+            Console.Write(builder.ToString());
         }
 
         public void DeleteElement()
         {
-            
+            var doc = XElement.Load(AppConfig.XmlFile);
+            var emp = (from e in doc.Descendants("Employee") where e.Element("id").Value.Equals("102") select e).SingleOrDefault();
+            if (emp != null)
+            {
+                emp.Remove();
+            }
+            doc.Save(AppConfig.XmlFile);
+            StringBuilder builder = new StringBuilder();
+            builder.Append(File.ReadAllText(AppConfig.XmlFile));
+            Console.Write(builder.ToString());
         }
     }
 }

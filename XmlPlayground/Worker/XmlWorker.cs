@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -200,22 +201,141 @@ namespace XmlPlayground.Worker
 
         public void SimpleWriting()
         {
+            // Create XmlWriter
+            XmlWriter writer = XmlWriter.Create(AppConfig.XmlFile);
 
+            // Write a start element (Root)
+            writer.WriteStartElement("Employees");
+            // Write a start element (Parent)
+            writer.WriteStartElement("Employee");
+            
+            writer.WriteStartElement("id");
+            writer.WriteString("1");
+            writer.WriteEndElement();
+
+            writer.WriteStartElement("FirstName");
+            writer.WriteString("Bruce");
+            writer.WriteEndElement();
+
+            writer.WriteStartElement("LastName");
+            writer.WriteString("Jones");
+            writer.WriteEndElement();
+
+            // Write a closing element (Parent)
+            writer.WriteEndElement();
+            // Write a closing element (Root)
+            writer.WriteEndElement();
+            writer.Close();
+
+            StringBuilder builder = new StringBuilder();
+            builder.Append(File.ReadAllText(AppConfig.XmlFile));
+            Console.Write(builder.ToString());
         }
 
         public void WritingAttributes()
         {
+            // Create XmlWriter
+            XmlWriter writer = XmlWriter.Create(AppConfig.XmlFile);
 
+            // Write a start element (Root)
+            writer.WriteStartElement("Employees");
+            // Write a start element (Parent)
+            writer.WriteStartElement("Employee");
+
+            writer.WriteAttributeString("id", "1");
+
+            writer.WriteStartElement("FirstName");
+            writer.WriteString("Bruce");
+            writer.WriteEndElement();
+
+            writer.WriteStartElement("LastName");
+            writer.WriteString("Jones");
+            writer.WriteEndElement();
+
+            // Write a closing element (Parent)
+            writer.WriteEndElement();
+            // Write a closing element (Root)
+            writer.WriteEndElement();
+            writer.Close();
+
+            StringBuilder builder = new StringBuilder();
+            builder.Append(File.ReadAllText(AppConfig.XmlFile));
+            Console.Write(builder.ToString());
         }
 
         public void Formatting()
         {
+            // Create XmlWriter
+            XmlWriter writer;
+            XmlWriterSettings settings = new XmlWriterSettings();
 
+            // Set the Format options
+            settings.Encoding = Encoding.UTF8;
+            settings.Indent = true;
+
+            writer = XmlWriter.Create(AppConfig.XmlFile, settings);
+
+            // Write a start element (Root)
+            writer.WriteStartElement("Employees");
+            // Write a start element (Parent)
+            writer.WriteStartElement("Employee");
+
+            writer.WriteAttributeString("id", "1");
+
+            writer.WriteStartElement("FirstName");
+            writer.WriteString("Bruce");
+            writer.WriteEndElement();
+
+            writer.WriteStartElement("LastName");
+            writer.WriteString("Jones");
+            writer.WriteEndElement();
+
+            // Write a closing element (Parent)
+            writer.WriteEndElement();
+            // Write a closing element (Root)
+            writer.WriteEndElement();
+            writer.Close();
+
+            StringBuilder builder = new StringBuilder();
+            builder.Append(File.ReadAllText(AppConfig.XmlFile));
+            Console.Write(builder.ToString());
         }
 
         public void WriteToStringBuilder()
         {
+            // Create XmlWriter
+            XmlWriter writer;
+            XmlWriterSettings settings = new XmlWriterSettings();
+            StringBuilder builder = new StringBuilder();            
 
+            // Set the Format options
+            settings.Encoding = Encoding.UTF8;
+            settings.Indent = true;
+
+            writer = XmlWriter.Create(builder, settings);
+
+            // Write a start element (Root)
+            writer.WriteStartElement("Employees");
+            // Write a start element (Parent)
+            writer.WriteStartElement("Employee");
+
+            writer.WriteAttributeString("id", "1");
+
+            writer.WriteStartElement("FirstName");
+            writer.WriteString("Bruce");
+            writer.WriteEndElement();
+
+            writer.WriteStartElement("LastName");
+            writer.WriteString("Jones");
+            writer.WriteEndElement();
+
+            // Write a closing element (Parent)
+            writer.WriteEndElement();
+            // Write a closing element (Root)
+            writer.WriteEndElement();
+            writer.Close();
+            
+            Console.Write(builder.ToString());
         }
     }
 
@@ -303,22 +423,77 @@ namespace XmlPlayground.Worker
 
         public void SimpleWritingVerbose()
         {
-            
+            XDocument doc;
+            XElement root, child, child2;
+
+            doc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XComment("Employee Records"), new XElement("Employees"));
+            root = doc.XPathSelectElement("//Employees");
+
+            child = new XElement("Employee");
+            root.Add(child);
+
+            child2 = new XElement("id", 1);
+            child.Add(child2);
+            child2 = new XElement("FirstName", "Bruce");
+            child.Add(child2);
+            child2 = new XElement("LastName", "Jones");
+            child.Add(child2);
+
+            doc.Save(AppConfig.XmlFile);
+            StringBuilder builder = new StringBuilder();
+            builder.Append(File.ReadAllText(AppConfig.XmlFile));
+            Console.Write(builder.ToString());
         }
 
         public void SimpleWriting()
         {
-            
+            XDocument doc;
+            XElement root, child;
+
+            doc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XComment("Employee Records"), new XElement("Employees"));
+            root = doc.XPathSelectElement("//Employees");
+
+            child = new XElement("Employee", new XElement("id", "1"), new XElement("FirstName", "Bruce"), new XElement("LastName", "Jones"));
+            root.Add(child);            
+
+            doc.Save(AppConfig.XmlFile);
+            StringBuilder builder = new StringBuilder();
+            builder.Append(File.ReadAllText(AppConfig.XmlFile));
+            Console.Write(builder.ToString());
         }
 
         public void WritingAttributes()
         {
-            
+            XDocument doc;
+            XElement root, child;
+
+            doc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XComment("Employee Records"), new XElement("Employees"));
+            root = doc.XPathSelectElement("//Employees");
+
+            child = new XElement("Employee", new XAttribute("id", "1"), new XElement("FirstName", "Bruce"), new XElement("LastName", "Jones"));
+            root.Add(child);
+
+            doc.Save(AppConfig.XmlFile);
+            StringBuilder builder = new StringBuilder();
+            builder.Append(File.ReadAllText(AppConfig.XmlFile));
+            Console.Write(builder.ToString());
         }
 
         public void NoFormatting()
         {
-            
+            XDocument doc;
+            XElement root, child;
+
+            doc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XComment("Employee Records"), new XElement("Employees"));
+            root = doc.XPathSelectElement("//Employees");
+
+            child = new XElement("Employee", new XAttribute("id", "1"), new XElement("FirstName", "Bruce"), new XElement("LastName", "Jones"));
+            root.Add(child);
+
+            doc.Save(AppConfig.XmlFile, SaveOptions.DisableFormatting);
+            StringBuilder builder = new StringBuilder();
+            builder.Append(File.ReadAllText(AppConfig.XmlFile));
+            Console.Write(builder.ToString());
         }
     }
 
